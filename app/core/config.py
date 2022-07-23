@@ -24,11 +24,15 @@ class Settings(BaseSettings):
     MYSQL_DATABASE: str
     DATABASE_URI: Optional[str] = None
 
+    DEFAULT_AWS_REGION: str
+    DEFAULT_S3_BUCKET: str
+    DEFAULT_S3_KEY: str
+
     @validator("DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
             return v
-        return f"mysql://{values.get('MYSQL_USER')}:{values.get('MYSQL_PASSWORD')}@{values.get('MYSQL_HOST')}:" \
+        return f"mysql+pymysql://{values.get('MYSQL_USER')}:{values.get('MYSQL_PASSWORD')}@{values.get('MYSQL_HOST')}:" \
                f"{values.get('MYSQL_PORT')}/{values.get('MYSQL_DATABASE')}"
 
     class Config:
